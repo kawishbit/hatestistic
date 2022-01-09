@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap");
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100vh;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: #fff;
+}
+
+.app {
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    width: 100%;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+.main-layer,
+.overlay-layer,
+.text-layer {
+    display: flex;
+    width: 100%;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    height: 100%;
+    padding: 40px;
+}
+
+.overlay-layer,
+.text-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+.overlay-layer {
+    z-index: 3;
+    background-color: #4ade80;
+    clip-path: inset(0 100% 0 0);
+    transition: all 2200ms ease-out 100ms;
+
+    textarea {
+        color: #fff;
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        &:disabled {
+            color: #fff;
+            background-color: transparent;
+        }
+    }
+}
+
+.hide {
+    opacity: 0;
+}
+
+.text-layer {
+    z-index: 1;
+    background-color: #fff;
+}
+
+.main-layer {
+    position: relative;
+    z-index: 10;
+}
+
+.action-layer {
+    display: flex;
+    width: 50%;
+    min-width: 500px;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 85px;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 75px;
+    z-index: 99;
+    background-color: #fff;
+    transform: translateX(-50%);
+    border-radius: 100px;
+    left: 50%;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border: 2px solid #000;
+
+    .action-section {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 15px 0 45px;
+        flex: 1 0 480px;
+
+        &.fixed {
+            justify-content: center;
+            max-width: 260px;
+            padding: 0;
+        }
+    }
+}
+
+textarea {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+    width: 90%;
+    line-height: 1.2;
+    height: 50vh;
+    font-size: 3em;
+    color: #000;
+    margin: 50px auto;
+    border: none;
+    outline: none;
+    resize: none;
+    background-color: transparent;
+
+    &::placeholder {
+        color: rgb(202, 202, 202);
+    }
+
+    &:disabled {
+        color: #000;
+        background-color: transparent;
+    }
+}
+
+.text-primary {
+    color: #60a5fa;
+}
+.text-success {
+    color: #4ade80;
+}
+.text-info {
+    color: #c084fc;
+}
+.text-warning {
+    color: #fbbf24;
+}
+.text-danger {
+    color: #ef4444;
+}
+.text-dark {
+    color: #333;
+}
+
+.percentage {
+    font-size: 1.7em;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+}
+
+button {
+    outline: none;
+    font-family: "Open Sans", sans-serif;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+    padding: 15px 20px;
+    font-size: 0.9em;
+    color: #fff;
+    font-weight: 700;
+    -webkit-appearance: button;
+    border-radius: 100px;
+    margin: 4px;
+    border: none;
+    min-height: 50px;
+    min-width: 150px;
+
+    &.btn-icon {
+        padding: 4px 4px;
+        height: 50px !important;
+        min-width: 50px !important;
+        font-size: 1.4em;
+    }
+
+    &.btn-primary {
+        background-color: #60a5fa;
+    }
+    &.btn-success {
+        background-color: #4ade80;
+    }
+    &.btn-info {
+        background-color: #6447cc;
+    }
+    &.btn-warning {
+        background-color: #ff9028;
+    }
+    &.btn-danger {
+        background-color: #ef4444;
+    }
+
+    &:disabled {
+        opacity: 0.15;
+        pointer-events: none;
+    }
+}
