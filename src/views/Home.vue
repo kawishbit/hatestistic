@@ -136,7 +136,6 @@ export default defineComponent({
 				let resp = await axios.get("https://bern.ibnuhx.com/predict", {
 					headers: {
 						Accept: "application/json",
-						"Accept-Encoding": "gzip, deflate",
 					},
 					params: {
 						q: this.mainText,
@@ -145,11 +144,11 @@ export default defineComponent({
 				console.log(resp);
 				this.numberFrom = 0;
 				this.result = {
-					q: resp.q,
-					filtered: resp.filtered,
-					prediction: parseInt(resp.prediction_percentage),
-					predictionPrecise: resp.prediction,
-					isHateSpeech: resp.is_hate_speech,
+					q: resp.data.q,
+					filtered: resp.data.filtered,
+					prediction: parseInt(resp.data.prediction_percentage),
+					predictionPrecise: resp.data.prediction,
+					isHateSpeech: resp.data.is_hate_speech,
 				};
 
 				this.overlayStyle = {
