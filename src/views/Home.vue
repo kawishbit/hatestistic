@@ -46,42 +46,56 @@
 			<button
 				class="btn-icon btn-danger"
 				:disabled="!calculated || disableButtons"
-				@click="resetSystem()"
+				@click="resetSystem"
 			>
 				<i class="fas fa-sync"></i>
 			</button>
 			<button
 				class="btn-icon btn-info"
 				:disabled="!calculated || disableButtons"
+				@click="showModal"
 			>
 				<i class="fas fa-exclamation"></i>
 			</button>
 			<button
 				class="btn-icon btn-primary"
 				:disabled="calculated || disableButtons"
-				@click="getResult()"
+				@click="getResult"
 			>
 				<i class="fas fa-arrow-right"></i>
 			</button>
 		</div>
 	</div>
+	<Modal v-show="isDetail" :header="true" :footer="false" @close="closeModal">
+		<template v-slot:header> Detail </template>
+
+		<template v-slot:body>
+			<p><b>Query :</b> {{ result.q }}</p>
+			<p><b>Filtered :</b> {{ result.filtered }}</p>
+			<p><b>Prediction :</b> {{ result.predictionPrecise }}</p>
+			<p><b>IsHateSpeech :</b> {{ result.isHateSpeech }}</p>
+		</template>
+	</Modal>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
 import Number from "@/components/Number.vue";
+import Modal from "@/components/Modal.vue";
 
 export default defineComponent({
 	name: "Home",
 	components: {
 		Number,
+		Modal,
 	},
 	data() {
 		return {
 			disableButtons: false,
+			isDetail: false,
 			numberFrom: 0,
-			duration: 3,
+			duration: 1.4,
 			mainText: "",
 			calculated: false,
 			overlayStyle: {
@@ -92,21 +106,22 @@ export default defineComponent({
 				q: "",
 				filtered: "",
 				prediction: 0,
-				is_hate_speech: false,
+				predictionPrecise: 0,
+				isHateSpeech: false,
 			},
 			randomTexts: [
-				"Jokowi tabang",
-				"Jokowi salto",
-				"Jokowi jokowi",
-				"What jokowi",
-				"Why jokowi",
-				"Whomst Jokowi",
-				"Where jokowi",
-				"Wagwan G",
-				"Ya dunkno fam",
-				"Sheeesh",
-				"Lorem Ipsum",
-				"You takin the piss?",
+				"Jokowi mending mati saja sana",
+				"Saya suka neapolitan ice cream",
+				"Orang kulit hitam tidak pantas diperlakukan seperti manusia",
+				"Kinerja pemerintahan jokowi mungkin bisa ditingkatkan lagi",
+				"Usir semua imigran dari tanah kita",
+				"China bangsat mengganggu kehidupan org aja",
+				"Itu ngapain cebong pada ngumpul di monas, mending tiduran aja dirumah",
+				"Kaum cebong kapir udah keliatan dongoknya dari awal tambah dongok lagi",
+				"Lawan bicara gw gak intelek kyk loe",
+				"Produk ASUS mudah rusak",
+				"Video documentary LEMMiNO luar biasa",
+				"Saat orang orang saling menuding antek aseng",
 			],
 			colors: ["#4ade80", "#60a5fa", "#ff9028", "#ef4444"],
 		};
@@ -119,37 +134,71 @@ export default defineComponent({
 			this.disableButtons = true;
 			try {
 				let resp = await axios.get(
-					"https://api.sampleapis.com/coffee/hot"
+					"http://stockholm.ibnuhx.com:9000/predict",
+					{
+						headers: {
+							Accept: "application/json",
+							"Accept-Encoding": "gzip, deflate",
+						},
+						params: {
+							q: this.mainText,
+						},
+					}
 				);
 				console.log(resp);
-			} catch (err) {
-				throw new Error("Error");
-			}
-
-			this.numberFrom = 0;
-			this.result = {
-				q: "asdasd",
-				filtered: "asdasdasd",
-				prediction: 98.22,
-				is_hate_speech: true,
-			};
-
-			this.overlayStyle = {
-				backgroundColor: "#4ade80",
-				clipPath: "inset(0 100% 0 0)",
-			};
-
-			this.calculated = true;
-			setTimeout(() => {
-				this.overlayStyle = {
-					backgroundColor: this.getColor(),
-					clipPath: `inset(0 ${
-						100 - Math.round(this.result.prediction)
-					}% 0 0)`,
+				this.numberFrom = 0;
+				this.result = {
+					q: resp.q,
+					filtered: resp.filtered,
+					prediction: parseInt(resp.prediction_percentage),
+					predictionPrecise: resp.prediction,
+					isHateSpeech: resp.is_hate_speech,
 				};
-				this.$refs.percentage.restart();
-				this.disableButtons = false;
-			}, 100);
+
+				this.overlayStyle = {
+					backgroundColor: "#4ade80",
+					clipPath: "inset(0 100% 0 0)",
+				};
+
+				this.calculated = true;
+				setTimeout(() => {
+					this.overlayStyle = {
+						backgroundColor: this.getColor(),
+						clipPath: `inset(0 ${
+							100 - Math.round(this.result.prediction)
+						}% 0 0)`,
+					};
+					this.$refs.percentage.restart();
+					this.disableButtons = false;
+				}, 100);
+			} catch (err) {
+				console.log(err);
+			}
+			// this.numberFrom = 0;
+			// this.result = {
+			// 	q: "asdasd",
+			// 	filtered: "asdasdasd",
+			// 	prediction: 98.22,
+			// 	predictionPrecise: 98.22,
+			// 	isHateSpeech: true,
+			// };
+
+			// this.overlayStyle = {
+			// 	backgroundColor: "#4ade80",
+			// 	clipPath: "inset(0 100% 0 0)",
+			// };
+
+			// this.calculated = true;
+			// setTimeout(() => {
+			// 	this.overlayStyle = {
+			// 		backgroundColor: this.getColor(),
+			// 		clipPath: `inset(0 ${
+			// 			100 - Math.round(this.result.prediction)
+			// 		}% 0 0)`,
+			// 	};
+			// 	this.$refs.percentage.restart();
+			// 	this.disableButtons = false;
+			// }, 100);
 		},
 		generateText() {
 			let text =
@@ -165,7 +214,8 @@ export default defineComponent({
 				q: "",
 				filtered: "",
 				prediction: 0.0,
-				is_hate_speech: false,
+				predictionPrecise: 0.0,
+				isHateSpeech: false,
 			};
 
 			this.overlayStyle = {
@@ -177,7 +227,7 @@ export default defineComponent({
 				this.mainText = "";
 				this.disableButtons = false;
 				this.calculated = false;
-			}, 4000);
+			}, 2300);
 		},
 		getColor() {
 			if (this.result.prediction >= 50) {
@@ -195,6 +245,12 @@ export default defineComponent({
 			} else {
 				return this.colors[0];
 			}
+		},
+		showModal() {
+			this.isDetail = true;
+		},
+		closeModal() {
+			this.isDetail = false;
 		},
 	},
 });
