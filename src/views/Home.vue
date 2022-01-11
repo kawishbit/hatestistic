@@ -133,18 +133,15 @@ export default defineComponent({
 		async getResult() {
 			this.disableButtons = true;
 			try {
-				let resp = await axios.get(
-					"http://stockholm.ibnuhx.com:9000/predict",
-					{
-						headers: {
-							Accept: "application/json",
-							"Accept-Encoding": "gzip, deflate",
-						},
-						params: {
-							q: this.mainText,
-						},
-					}
-				);
+				let resp = await axios.get("https://bern.ibnuhx.com/predict", {
+					headers: {
+						Accept: "application/json",
+						"Accept-Encoding": "gzip, deflate",
+					},
+					params: {
+						q: this.mainText,
+					},
+				});
 				console.log(resp);
 				this.numberFrom = 0;
 				this.result = {
