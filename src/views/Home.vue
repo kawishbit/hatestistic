@@ -14,7 +14,11 @@
 		></textarea>
 	</div>
 	<div class="main-layer" :class="{ hide: calculated }">
-		<textarea v-model="mainText" placeholder="Your text here..."></textarea>
+		<textarea
+			v-model="mainText"
+			placeholder="Your text here..."
+			:disabled="calculated"
+		></textarea>
 	</div>
 
 	<div class="action-layer">
