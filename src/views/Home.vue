@@ -146,10 +146,11 @@ export default defineComponent({
 				this.result = {
 					q: resp.data.q,
 					filtered: resp.data.filtered,
-					prediction: parseInt(resp.data.prediction_percentage),
+					prediction: parseFloat(resp.data.prediction_percentage),
 					predictionPrecise: resp.data.prediction,
 					isHateSpeech: resp.data.is_hate_speech,
 				};
+				console.log(this.result);
 
 				this.overlayStyle = {
 					backgroundColor: "#4ade80",
