@@ -1,5 +1,7 @@
 # hatespeech
 
+Personal attempt on implementing NLP hate speech detection for indonesian's twitter scene
+
 ## Project setup
 ```
 npm install
